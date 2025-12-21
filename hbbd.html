@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thư Giáng Sinh 💌</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+    --color-env: #c41e3a;
+    --color-env2: #a01729;
+    --color-flap: #2e7d32;
+    --color-bg: #165016;
+    --color-heart: #ff0000;
+    --color-sparkle: #fff;
+    --wax-red: #c41e3a;
+}
+
+body {
+    background: radial-gradient(circle at top, #1f1f41, #18101b 80%);
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    user-select: none;
+    cursor: auto;
+    position: relative;
+    overflow: hidden; 
+}
+
+.envlope-wrapper {
+    height: 380px;
+    margin-top: 50px;
+    animation: float 3s ease-in-out infinite;
+}
+
+#envelope {
+    position: relative;
+    width: 380px;
+    height: 240px;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    margin: 0 auto;
+    top: 150px;
+    background-color: var(--color-flap);
+    box-shadow: 0 4px 20px rgba(0,0,0,.1);
+    cursor: pointer;
+}
+
+.front {
+    position: absolute;
+    width: 0;
+    height: 0;
+    z-index: 3;
+}
+
+.flap {
+    border-left: 190px solid transparent;
+    border-right: 190px solid transparent;
+    border-bottom: 92px solid transparent;
+    border-top: 150px solid var(--color-flap);
+    transform-origin: top;
+    pointer-events: none;
+}
+
+.pocket {
+    border-left: 190px solid var(--color-env);
+    border-right: 190px solid var(--color-env);
+    border-bottom: 90px solid var(--color-env2);
+    border-top: 150px solid transparent;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+
+.letter {
+    position: relative;
+    background-color: #e0c784;
+    width: 95%;
+    margin: 0 auto;
+    height: 95%;
+    top: 0%;
+    border-radius: 15px;
+    box-shadow: 0 2px 26px rgba(0,0,0,.08);
+    padding: 15px;
+    box-sizing: border-box;
+    overflow: hidden;
+    border: 6px solid;
+    border-image: repeating-linear-gradient(
+        45deg,
+        #ff0000 0 10px,
+        #ffffff 10px 20px
+    ) 1;
+}
+
+.letter:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-image: linear-gradient(180deg, 
+        rgba(255,255,255,0.00) 25%, 
+        rgba(255,231,236,0.70) 55%, 
+        rgba(255,231,236,1.00) 100%);
+    pointer-events: none;
+}
+
+.message {
+    position: relative;
+    z-index: 2;
+    font-family: 'Pacifico', cursive;
+    color: #054508;
+    text-align: center;
+    line-height: 1.4;
+    padding: 5px;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.message p {
+    margin: 10px 0;
+    font-size: 1.4em;
+    text-shadow: 0 2px 3px rgba(0,0,0,0.1);
+}
+
+.lyrics {
+    display: none;
+    font-size: 15px;
+    line-height: 1.5;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 1s ease-in;
+    max-height: 130px;
+    overflow-y: auto;
+}
+
+.lyric-page {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.lyric-page.active {
+    display: block;
+    opacity: 1;
+}
+
+.open .flap {
+    transform: rotateX(180deg);
+    transition: transform 0.4s ease, z-index 0.6s;
+    z-index: 1;
+}
+
+.close .flap {
+    transform: rotateX(0deg);
+    transition: transform 0.4s 0.6s ease, z-index 1s;
+    z-index: 5;
+}
+
+.close .letter {
+    transform: translateY(0px); 
+    transition: transform 0.4s ease, z-index 1s;
+    z-index: 1;
+}
+
+.open .letter {
+    transform: translateY(-80px) rotate(-3deg);
+    transition: transform 0.4s 0.6s ease, z-index 0.6s;
+    z-index: 2;
+}
+
+.letter-corner {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #2a470c;
+    border-radius: 5px;
+    z-index: 3;
+}
+
+.corner-tl { top: 10px; left: 10px; border-right: none; border-bottom: none; }
+.corner-br { bottom: 10px; right: 10px; border-left: none; border-top: none; }
+
+.hearts, .sparkles {
+    position: absolute;
+    top: 90px;
+    left: 0;
+    right: 0;
+    z-index: 2;
+}
+
+.heart, .sparkle {
+    position: absolute;
+    bottom: 0;
+    pointer-events: none;
+}
+
+.heart:before,
+.heart:after {
+    content: "";
+    position: absolute;
+    left: 25px;
+    top: 0;
+    width: 25px;
+    height: 40px;
+    background: var(--color-heart);
+    border-radius: 25px 25px 0 0;
+    transform: rotate(-45deg);
+    transform-origin: 0 100%;
+}
+
+.heart:after {
+    left: 0;
+    transform: rotate(45deg);
+    transform-origin: 100% 100%;
+}
+
+.sparkle {
+    width: 8px;
+    height: 8px;
+    background: var(--color-sparkle);
+    border-radius: 50%;
+    animation: sparkleTwinkle 1s infinite;
+}
+
+.close .heart,
+.close .sparkle {
+    opacity: 0;
+    animation: none;
+}
+
+.a1 { left: 20%; transform: scale(0.6); animation: slideUp 4s linear infinite, sideSway 2s ease-in-out infinite alternate; }
+.a2 { left: 55%; animation: slideUp 5s linear infinite, sideSway 4s ease-in-out infinite alternate; }
+.a3 { left: 10%; transform: scale(0.8); animation: slideUp 7s linear infinite, sideSway 2s ease-in-out infinite alternate; }
+
+.s1 { left: 30%; animation: sparkleUp 3s linear infinite; }
+.s2 { left: 60%; animation: sparkleUp 4s linear infinite; }
+.s3 { left: 45%; animation: sparkleUp 5s linear infinite; }
+
+@keyframes slideUp {
+    0% { top: 0; }
+    100% { top: -600px; }
+}
+
+@keyframes sideSway {
+    0% { margin-left: 0; }
+    50% { margin-left: 50px; }
+    100% { margin-left: 0; }
+}
+
+@keyframes sparkleUp {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(-500px) rotate(360deg); opacity: 0; }
+}
+
+@keyframes sparkleTwinkle {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.5); }
+}
+
+.controls {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.controls button {
+    font-weight: 600;
+    background: linear-gradient(135deg, #c41e3a, #a01729, #2e7d32);
+    border: 2px solid #ffd700;
+    border-radius: 25px;
+    color: rgb(255, 255, 255);
+    padding: 12px 28px;
+    margin: 10px;
+    font-size: 17px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    
+    /* Hiệu ứng Noel */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2),
+                0 0 10px rgba(255, 215, 0, 0.4);
+    transition: all 0.35s ease;
+    letter-spacing: 0.5px;
+}
+.controls button:hover {
+    /* Tăng độ sáng và glow */
+    transform: translateY(-4px) scale(1.07);
+    background: linear-gradient(135deg, #ff003c, #c41e3a, #3fa34d);
+    box-shadow: 0 6px 25px rgba(0,0,0,0.25),
+                0 0 14px rgba(255, 215, 0, 0.6),
+                0 0 25px rgba(255, 0, 0, 0.4);
+}
+
+/* Nhấn xuống */
+.controls button:active {
+    transform: scale(0.96);
+    box-shadow: 0 3px 12px rgba(0,0,0,0.2);
+}
+
+.open .lyrics {
+    display: block;
+    opacity: 1;
+}
+
+.page-indicator {
+    position: absolute;
+    bottom: 5px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 0.8em;
+    color: #274715;
+    opacity: 0.7;
+}
+
+/* ====== HIỆU ỨNG NGÔI SAO LẤP LÁNH ====== */
+.star-field {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    pointer-events: none; /* Không cản click */
+}
+
+.star {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: white;
+    border-radius: 50%;
+    opacity: 0;
+    animation: twinkle 2s infinite ease-in-out;
+}
+
+@keyframes twinkle {
+    0% { opacity: 0; transform: scale(0.5); }
+    50% { opacity: 1; transform: scale(1.5); }
+    100% { opacity: 0; transform: scale(0.5); }
+}
+/* ====== HIỆU ỨNG BÔNG TUYẾT RƠI ====== */
+.snowflake {
+    position: fixed;
+    top: -10px;
+    color: white;
+    font-size: 12px;
+    opacity: 0.8;
+    pointer-events: none;
+    animation: fall linear infinite;
+}
+
+@keyframes fall {
+    0% { transform: translateY(0) rotate(0deg); opacity: 0.9; }
+    100% { transform: translateY(100vh) rotate(360deg); opacity: 0.2; }
+}
+.santa {
+  position: fixed;
+  bottom: 5%;       
+  right: -400px;     
+  width: 400px;       
+  animation: flySanta 12s linear infinite;
+  z-index: 9999;
+}
+
+@media (max-width: 768px) {
+  .santa {
+    top: 50%;   /* thay đổi theo ý bạn */
+    width: 250px;  /* optional: cho vừa màn điện thoại */
+    right: -250px; /* optional: chỉnh theo width */
+  }
+}
+
+@keyframes flySanta {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-150vw); /* Bay ra khỏi mép trái */
+  }
+}
+    </style>
+   
+</head>
+<body>
+    <img src="https://i.pinimg.com/originals/7f/1f/76/7f1f76ac29bc01ad318abbf0468b1062.gif" class="santa" alt="">
+    <div class="star-field"></div>
+    <div class="envlope-wrapper">
+        <div id="envelope" class="close">
+            <div class="wax-seal"></div>
+            <div class="front flap"></div>
+            <div class="front pocket"></div>
+            <div class="letter">
+                <div class="letter-corner corner-tl"></div>
+                <div class="letter-corner corner-br"></div>
+                <div class="message">
+                    <div class="lyrics">
+                        <div class="lyric-page active" id="page1"><p>Gửi em... 🎄❤️</p></div>
+
+                        <div class="lyric-page" id="page2"><p>Giáng Sinh lại về, mang theo cái lạnh dễ thương của mùa đông…</p></div>
+                        <div class="lyric-page" id="page3"><p>và cả những điều anh muốn nói với em từ lâu.</p></div>
+
+                        <div class="lyric-page" id="page4"><p>Trong ánh đèn Noel lấp lánh,</p></div>
+                        <div class="lyric-page" id="page5"><p>anh chỉ ước có em bên cạnh để sẻ chia ấm áp.</p></div>
+
+                        <div class="lyric-page" id="page6"><p>Em biết không… ✨</p></div>
+                        <div class="lyric-page" id="page7"><p>sự xuất hiện của em khiến mùa đông này trở nên đặc biệt hơn.</p></div>
+
+                        <div class="lyric-page" id="page8"><p>Không cần tuyết rơi,</p></div>
+                        <div class="lyric-page" id="page9"><p>chỉ cần nụ cười của em là đủ làm trái tim anh ấm lại.</p></div>
+
+                        <div class="lyric-page" id="page10"><p>Giáng Sinh là mùa của yêu thương,</p></div>
+                        <div class="lyric-page" id="page11"><p>và anh muốn dành phần yêu thương nhất cho em. ❤️</p></div>
+
+                        <div class="lyric-page" id="page12"><p>Anh chẳng có món quà đắt tiền nào,</p></div>
+                        <div class="lyric-page" id="page13"><p>chỉ có tấm lòng chân thành muốn gửi đến em.</p></div>
+
+                        <div class="lyric-page" id="page14"><p>Anh chúc em một mùa Noel an yên,</p></div>
+                        <div class="lyric-page" id="page15"><p>một trái tim ấm áp,</p></div>
+                        <div class="lyric-page" id="page16"><p>và một nụ cười luôn nở trên môi. ✨</p></div>
+
+                        <div class="lyric-page" id="page17"><p>Nếu có thể…</p></div>
+                        <div class="lyric-page" id="page18"><p>anh muốn trở thành người khiến em hạnh phúc trong mùa đông này.</p></div>
+
+                        <div class="lyric-page" id="page19"><p>Dẫu tuyết không rơi ở nơi ta sống,</p></div>
+                        <div class="lyric-page" id="page20"><p>anh vẫn mong mang đến cho em cảm giác đẹp như phép màu Giáng Sinh.</p></div>
+
+                        <div class="lyric-page" id="page21"><p>Cảm ơn em đã xuất hiện trong cuộc đời anh…</p></div>
+                        <div class="lyric-page" id="page22"><p>dù là vô tình hay do ông già Noel sắp đặt. 🎅💫</p></div>
+
+                        <div class="lyric-page" id="page23"><p>Merry Christmas, tình yêu của anh. ❤️🎄</p></div>
+                    </div>
+                </div>
+            </div>
+            <div class="hearts">
+                <div class="heart a1"></div>
+                <div class="heart a2"></div>
+                <div class="heart a3"></div>
+            </div>
+            <div class="sparkles">
+                <div class="sparkle s1"></div>
+                <div class="sparkle s2"></div>
+                <div class="sparkle s3"></div>
+            </div>
+        </div>
+    </div>
+    <div class="controls">
+        <button id="openBtn">Mở</button>
+        <button id="resetBtn" style="display: none;">Đóng</button>
+    </div>
+    <audio id="sound" loop>
+      <source src="./style/nhac.mp3" type="audio/mpeg" />
+    </audio>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script >$(document).ready(function () {
+  const envelope = $('#envelope');
+  const openBtn = $("#openBtn");
+  const resetBtn = $("#resetBtn");
+
+  let currentPage = 1;
+  const totalPages = 23;
+  let isOpen = false;
+
+  envelope.on('click', function () {
+      if (isOpen) nextLyric();
+  });
+
+  openBtn.on('click', function () {
+      envelope.removeClass("close").addClass("open");
+      isOpen = true;
+      openBtn.hide();
+      resetBtn.show();
+  });
+
+  resetBtn.on('click', function () {
+      envelope.removeClass("open").addClass("close");
+      isOpen = false;
+      setTimeout(function () {
+          currentPage = 1;
+          updateActivePage();
+          resetBtn.hide();
+          openBtn.show();
+      }, 600);
+  });
+
+  function nextLyric() {
+      currentPage = currentPage < totalPages ? currentPage + 1 : 1;
+      updateActivePage();
+  }
+
+  function updateActivePage() {
+      $(".lyric-page").removeClass("active");
+      $("#page" + currentPage).addClass("active");
+  }
+});
+
+const openBtn = document.getElementById("openBtn");
+const resetBtn = document.getElementById("resetBtn");
+const envelope = document.getElementById("envelope");
+const audio = document.getElementById("sound");
+
+let hasPlayed = false;
+
+function playAudioOnce() {
+    audio.currentTime = 21;
+    if (!hasPlayed) {
+        audio.play().then(() => {
+            hasPlayed = true;
+        }).catch((e) => {
+            console.log("Không thể phát nhạc:", e);
+        });
+    }
+}
+
+openBtn.addEventListener("click", function () {
+    envelope.classList.remove("close");
+    envelope.classList.add("open");
+    openBtn.style.display = "none";
+    resetBtn.style.display = "inline-block";
+    playAudioOnce();
+});
+
+resetBtn.addEventListener("click", function () {
+    envelope.classList.remove("open");
+    envelope.classList.add("close");
+    openBtn.style.display = "inline-block";
+    resetBtn.style.display = "none";
+    playAudioOnce();
+});
+// ====== TẠO SAO NGẪU NHIÊN ======
+const starField = document.querySelector('.star-field');
+
+for (let i = 0; i < 200; i++) {
+    const star = document.createElement('div');
+    star.classList.add('star');
+
+    const x = Math.random() * 100;
+    const y = Math.random() * 100;
+    const delay = Math.random() * 5;
+    const duration = 2 + Math.random() * 3;
+
+    star.style.left = x + 'vw';
+    star.style.top = y + 'vh';
+    star.style.animationDelay = delay + 's';
+    star.style.animationDuration = duration + 's';
+
+    starField.appendChild(star);
+}
+// ====== HIỆU ỨNG BÔNG TUYẾT RƠI ======
+function createSnowflake() {
+    const snow = document.createElement("div");
+    snow.classList.add("snowflake");
+    snow.textContent = "❄";
+
+    // Vị trí và tốc độ rơi ngẫu nhiên
+    snow.style.left = Math.random() * 100 + "vw";
+    snow.style.animationDuration = 5 + Math.random() * 5 + "s"; 
+    snow.style.fontSize = (10 + Math.random() * 15) + "px"; 
+
+    document.body.appendChild(snow);
+
+    // Xóa sau khi rơi xong
+    setTimeout(() => {
+        snow.remove();
+    }, 10000);
+}
+
+// Tạo bông tuyết liên tục
+setInterval(createSnowflake, 150);
+</script>
+</body>
+</html>
